@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import Header from './Components/Header';
+import Results from './Components/Results';
+import Userinput from './Components/Userinput';
+
+
 
 function App() {
+  const [userInput, setUserInput] = useState({
+    initialInvestment: 10000,
+    annualInvestment: 1200,
+    expectedReturn: 5,
+    duration: 10,
+  });
+
+  const inputIsValid = userInput.duration >= 1
+
+  function handleChange(inputIdentifier, newValue) {
+    setUserInput( prevUserInput => {
+      return {
+        ...prevUserInput,
+        [inputIdentifier] : +newValue,
+      }
+    })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header/>
+      <Userinput 
+      onChangeInput={handleChange} 
+      inputUser={userInput}/>
+      {inputIsValid ? <Results inputUser={userInput} initialInvestment={userInput.initialInvestment}/> : <p className='center'>Duration should be greater than 0</p>}
+    </>
   );
 }
 
